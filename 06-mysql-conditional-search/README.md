@@ -61,6 +61,10 @@ the focus stays on query logic rather than joins. The data includes different
 departments, salaries, cities, employment statuses, hire dates, and NULL manager
 values so each condition returns a useful result.
 
+Employee names are stored separately in `first_name` and `last_name`. This makes
+sorting, filtering, and formatting either part of a name simpler; queries can
+use `CONCAT(first_name, ' ', last_name)` when a full display name is needed.
+
 ---
 
 ## Part 0 — Build the EC2 and MariaDB Prerequisites
@@ -199,9 +203,12 @@ USE conditional_search_demo;
 
 SELECT COUNT(*) AS total_employees
 FROM employees;
+
+DESCRIBE employees;
 ```
 
-**Checkpoint:** The result must show `20` employees.
+**Checkpoint:** The count must show `20`. The table definition must contain
+`first_name` and `last_name`, with no `employee_name` column.
 
 ---
 
@@ -210,7 +217,7 @@ FROM employees;
 A `WHERE` clause decides which individual rows are allowed into the result.
 
 ```sql
-SELECT employee_name, department, salary, employment_status
+SELECT first_name, last_name, department, salary, employment_status
 FROM employees
 WHERE department = 'IT'
   AND employment_status = 'Active'
@@ -220,7 +227,7 @@ WHERE department = 'IT'
 Parentheses are important when combining `AND` and `OR`:
 
 ```sql
-SELECT employee_name, department, employment_status
+SELECT first_name, last_name, department, employment_status
 FROM employees
 WHERE employment_status = 'Active'
   AND (department = 'IT' OR department = 'Finance');
@@ -258,14 +265,16 @@ own query so you can change one expression at a time and compare the output.
 ### Character strings and string functions
 
 Character strings are written inside single quotes, such as `'Active'` and
-`'%engineer%'`. Columns including `employee_name`, `department`, and `job_title`
-use `VARCHAR` because their text lengths vary.
+`'%engineer%'`. Columns including `first_name`, `last_name`, `department`, and
+`job_title` use `VARCHAR` because their text lengths vary.
 
 ```sql
 SELECT
-    employee_name,
-    CHAR_LENGTH(employee_name) AS name_length,
-    SUBSTRING(employee_name, 1, 3) AS first_three_characters,
+    first_name,
+    last_name,
+    CONCAT(first_name, ' ', last_name) AS full_name,
+    CHAR_LENGTH(CONCAT(first_name, ' ', last_name)) AS full_name_length,
+    SUBSTRING(first_name, 1, 3) AS first_three_characters,
     CONCAT(UPPER(department), ': ', TRIM(job_title)) AS employee_summary
 FROM employees
 WHERE LOWER(job_title) LIKE '%engineer%';
@@ -277,7 +286,8 @@ Use `CAST()` or `CONVERT()` when the result needs a different data type:
 
 ```sql
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     CAST(employee_id AS CHAR) AS employee_id_text,
     CAST(salary AS SIGNED) AS salary_whole_number,
     CONVERT(hire_date, CHAR) AS hire_date_text
@@ -288,7 +298,8 @@ FROM employees;
 
 ```sql
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     YEAR(hire_date) AS hire_year,
     MONTHNAME(hire_date) AS hire_month,
     DATEDIFF(CURDATE(), hire_date) AS days_employed,
@@ -305,7 +316,8 @@ FROM employees;
 
 ```sql
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     ROUND(salary / 12, 2) AS monthly_salary,
     CEILING(salary / 12) AS monthly_salary_rounded_up,
     FLOOR(salary / 12) AS monthly_salary_rounded_down,
@@ -321,7 +333,8 @@ FROM employees;
 
 ```sql
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     IF(employment_status = 'Active', 'Available', 'Unavailable') AS availability,
     IFNULL(CAST(manager_id AS CHAR), 'No Manager') AS manager_reference,
     CASE
@@ -372,7 +385,7 @@ FROM employees;
 Use `ORDER BY` to sort individual rows:
 
 ```sql
-SELECT employee_name, department, salary
+SELECT first_name, last_name, department, salary
 FROM employees
 ORDER BY department ASC, salary DESC;
 ```
@@ -436,8 +449,9 @@ the SQL file repeat these challenges but do not provide the completed queries.
 7. Return every distinct department and city combination.
 8. Return the total row count, count of non-NULL manager IDs, and count of
    distinct departments in one result.
-9. Use character-string functions to display an uppercase employee label and the
-   number of characters in each employee's name.
+9. Use character-string functions to combine `first_name` and `last_name`,
+   display an uppercase employee label, and count the characters in the full
+   name.
 
 For every query, verify both the returned rows and the column headings. A query
 that runs without an error can still implement the wrong business condition.
