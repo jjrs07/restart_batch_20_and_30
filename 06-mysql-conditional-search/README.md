@@ -12,7 +12,8 @@ By the end of this activity, you will be able to:
 
 1. Launch and securely connect to an Amazon Linux 2023 EC2 instance
 2. Install, start, validate, and harden MariaDB
-3. Filter records with `WHERE`, `AND`, `OR`, `BETWEEN`, `IN`, `LIKE`, and `IS NULL`
+3. Build conditional searches with `WHERE`, comparison operators, logical
+   operators, wildcards, column aliases, arithmetic expressions, and NULL values
 4. Work with character strings and string functions
 5. Use conversion, date, mathematical, aggregate, and control flow functions
 6. Compare `DISTINCT`, `COUNT(*)`, `COUNT(column)`, and `COUNT(DISTINCT column)`
@@ -31,6 +32,7 @@ By the end of this activity, you will be able to:
 | Compute | One disposable Amazon Linux 2023 EC2 instance |
 | Database | MariaDB 10.5 or later, installed during this activity |
 | Database access | Local administrative access through `sudo mariadb`; no remote database port is required |
+| Salary data | Illustrative gross monthly Philippine pesos (`PHP`); not an official compensation survey |
 | Script | [`employee-search-demo.sql`](employee-search-demo.sql) |
 
 > **Warning:** The script drops and recreates a database named
@@ -47,7 +49,7 @@ Student computer
     └── Amazon Linux 2023 EC2 instance
         └── MariaDB bound locally; TCP/3306 is not exposed
             └── conditional_search_demo database
-                └── employees table (20 rows)
+                └── employees table (30 rows)
                     ├── WHERE filters individual rows
                     ├── functions calculate or transform values
                     ├── GROUP BY creates summary groups
@@ -60,6 +62,11 @@ uses SQL that runs on MariaDB 10.5+ and MySQL 8.0+. The examples use one table s
 the focus stays on query logic rather than joins. The data includes different
 departments, salaries, cities, employment statuses, hire dates, and NULL manager
 values so each condition returns a useful result.
+
+The `salary` column stores illustrative **gross monthly salary in Philippine
+pesos (PHP)**. Values are calibrated by job family and seniority for classroom
+use, but actual compensation varies by experience, employer, location, benefits,
+and market conditions.
 
 Employee names are stored separately in `first_name` and `last_name`. This makes
 sorting, filtering, and formatting either part of a name simpler; queries can
@@ -189,7 +196,7 @@ From the lab folder on the EC2 instance, load the complete dataset and examples:
 sudo mariadb < employee-search-demo.sql
 ```
 
-The script prints several result sets because it includes both the 20-row dataset
+The script prints several result sets because it includes both the 30-row dataset
 and the demonstration queries. To run queries individually, open the client:
 
 ```bash
@@ -207,7 +214,7 @@ FROM employees;
 DESCRIBE employees;
 ```
 
-**Checkpoint:** The count must show `20`. The table definition must contain
+**Checkpoint:** The count must show `30`. The table definition must contain
 `first_name` and `last_name`, with no `employee_name` column.
 
 ---
@@ -215,6 +222,19 @@ DESCRIBE employees;
 ## Part 2 — Conditional Search
 
 A `WHERE` clause decides which individual rows are allowed into the result.
+
+| Exercise topic | SQL syntax demonstrated |
+|---|---|
+| `WHERE` clauses | `WHERE department = 'IT'` |
+| Comparison operators | `=`, `<>`, `>`, `>=`, `<`, `<=`, and `BETWEEN` |
+| Arithmetic operators | `+`, `-`, `*`, `/`, and `%` |
+| Logical operators | `AND`, `OR`, and `NOT` |
+| Wildcards | `%` for zero or more characters and `_` for one character |
+| Column aliases | `AS monthly_salary`, `AS annual_salary`, and `AS full_name` |
+| NULL values | `IS NULL`, `IS NOT NULL`, and `IFNULL()` |
+
+This example combines comparison and logical operators. All three conditions
+must evaluate to true:
 
 ```sql
 SELECT first_name, last_name, department, salary, employment_status
@@ -229,19 +249,59 @@ Parentheses are important when combining `AND` and `OR`:
 ```sql
 SELECT first_name, last_name, department, employment_status
 FROM employees
-WHERE employment_status = 'Active'
+WHERE NOT employment_status = 'Inactive'
   AND (department = 'IT' OR department = 'Finance');
 ```
 
 Without the parentheses, SQL may evaluate the conditions differently from what
 you intended because `AND` has higher precedence than `OR`.
 
-Other useful search operators are demonstrated in the SQL script:
+Use arithmetic operators to calculate result columns and `AS` to give each
+calculated column a clear alias:
+
+```sql
+SELECT
+    first_name,
+    last_name,
+    salary AS monthly_salary,
+    salary * 0.05 AS estimated_monthly_bonus,
+    salary + (salary * 0.05) AS projected_monthly_pay,
+    salary - 5000 AS monthly_salary_minus_5000,
+    salary * 12 AS annual_salary,
+    employee_id % 2 AS id_remainder
+FROM employees
+WHERE salary >= 60000;
+```
+
+`LIKE` uses wildcards when an exact text value is not known:
+
+```sql
+-- % matches zero or more characters
+SELECT first_name, last_name, job_title
+FROM employees
+WHERE job_title LIKE '%Manager';
+
+-- _ matches exactly one character
+SELECT first_name, last_name
+FROM employees
+WHERE first_name LIKE '_a%';
+```
+
+NULL represents a missing or unknown value. Test it with `IS NULL` or
+`IS NOT NULL`, never `= NULL` or `<> NULL`:
+
+```sql
+SELECT first_name, last_name, manager_id
+FROM employees
+WHERE manager_id IS NULL;
+```
+
+Other useful search operators demonstrated in the SQL script include:
 
 - `BETWEEN` searches an inclusive range.
 - `IN` matches any value in a list.
-- `LIKE` searches a text pattern; `%` represents zero or more characters.
-- `IS NULL` finds missing values. Do not use `= NULL`.
+- `LIKE` searches a text pattern with `%` and `_` wildcards.
+- `IS NULL` and `IS NOT NULL` test missing and present values.
 
 ---
 
@@ -318,9 +378,10 @@ FROM employees;
 SELECT
     first_name,
     last_name,
-    ROUND(salary / 12, 2) AS monthly_salary,
-    CEILING(salary / 12) AS monthly_salary_rounded_up,
-    FLOOR(salary / 12) AS monthly_salary_rounded_down,
+    salary AS monthly_salary,
+    ROUND(salary * 12, 2) AS annual_salary,
+    CEILING(salary / 22) AS estimated_daily_rate_rounded_up,
+    FLOOR(salary / 22) AS estimated_daily_rate_rounded_down,
     ABS(salary - 70000) AS difference_from_70000,
     MOD(employee_id, 2) AS employee_id_remainder
 FROM employees;
@@ -371,10 +432,10 @@ Aggregate functions calculate one result from multiple rows:
 ```sql
 SELECT
     COUNT(*) AS employee_count,
-    SUM(salary) AS total_salary,
-    ROUND(AVG(salary), 2) AS average_salary,
-    MIN(salary) AS lowest_salary,
-    MAX(salary) AS highest_salary
+    SUM(salary) AS total_monthly_payroll,
+    ROUND(AVG(salary), 2) AS average_monthly_salary,
+    MIN(salary) AS lowest_monthly_salary,
+    MAX(salary) AS highest_monthly_salary
 FROM employees;
 ```
 
@@ -396,10 +457,10 @@ Use `GROUP BY` with aggregate functions to summarize rows:
 SELECT
     department,
     COUNT(*) AS employee_count,
-    ROUND(AVG(salary), 2) AS average_salary
+    ROUND(AVG(salary), 2) AS average_monthly_salary
 FROM employees
 GROUP BY department
-ORDER BY average_salary DESC;
+ORDER BY average_monthly_salary DESC;
 ```
 
 Use `HAVING` to filter the grouped results:
@@ -408,13 +469,13 @@ Use `HAVING` to filter the grouped results:
 SELECT
     department,
     COUNT(*) AS active_employee_count,
-    ROUND(AVG(salary), 2) AS average_active_salary
+    ROUND(AVG(salary), 2) AS average_active_monthly_salary
 FROM employees
 WHERE employment_status = 'Active'
 GROUP BY department
 HAVING COUNT(*) >= 2
    AND AVG(salary) >= 60000
-ORDER BY average_active_salary DESC;
+ORDER BY average_active_monthly_salary DESC;
 ```
 
 Remember the logical query flow:
@@ -442,8 +503,8 @@ the SQL file repeat these challenges but do not provide the completed queries.
    completed years they have worked.
 4. Display each employee ID as character text, and convert each salary to a
    signed whole number.
-5. Display monthly salary rounded to two decimal places and salary after a 5%
-   increase.
+5. Display gross monthly salary, estimated annual salary, and monthly salary
+   after a 5% increase. Use clear column aliases.
 6. Use `IF()` or `CASE` to label each employee as `Active Staff`, `Temporarily
    Unavailable`, or `Former Staff`.
 7. Return every distinct department and city combination.
@@ -452,6 +513,19 @@ the SQL file repeat these challenges but do not provide the completed queries.
 9. Use character-string functions to combine `first_name` and `last_name`,
    display an uppercase employee label, and count the characters in the full
    name.
+10. **WHERE clause:** Return only employees from the Finance department.
+11. **Comparison operators:** Find employees whose salary is greater than or
+    equal to `60000` and less than `90000`, and whose status is not `Inactive`.
+12. **Arithmetic operators:** Calculate a 7% monthly bonus, annual salary, and
+    monthly salary plus bonus for every employee.
+13. **Logical operators:** Find Active employees who work in IT or Finance, then
+    exclude employees located in Makati by using `NOT`.
+14. **Wildcards:** Use `%` to find job titles ending in `Manager`, then use `_`
+    to find first names whose second character is `a`.
+15. **Column aliases:** Display the combined first and last name as `full_name`,
+    salary as `monthly_salary`, and salary multiplied by 12 as `annual_salary`.
+16. **NULL values:** Write one query for employees without a manager and another
+    for employees with a manager. Do not use `= NULL` or `<> NULL`.
 
 For every query, verify both the returned rows and the column headings. A query
 that runs without an error can still implement the wrong business condition.
@@ -532,10 +606,10 @@ Use the local administrative socket login for this lab:
 sudo mariadb
 ```
 
-### The row count is greater than 20
+### The row count is greater than 30
 
 Run the complete setup script again. It recreates the dedicated demo database and
-loads exactly 20 rows.
+loads exactly 30 rows.
 
 ### A grouped query fails with `ONLY_FULL_GROUP_BY`
 
@@ -563,6 +637,17 @@ GROUP BY grouping_column
 HAVING COUNT(*) >= 2
 ORDER BY average_value DESC;
 ```
+
+---
+
+## Salary Benchmark References
+
+- [JobStreet Philippines salary insights for Cloud Engineers](https://ph.jobstreet.com/career-advice/role/cloud-engineer/salary)
+- [A7 Recruitment Philippines Salary Guide 2026](https://a7recruitment.com/philippines-salary-guide-2026/)
+
+These references informed the dataset's general monthly salary scale. The sample
+values are intentionally varied for SQL practice and must not be treated as
+compensation advice or guaranteed market rates.
 
 ---
 
