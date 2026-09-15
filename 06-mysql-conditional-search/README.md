@@ -13,10 +13,12 @@ By the end of this activity, you will be able to:
 1. Launch and securely connect to an Amazon Linux 2023 EC2 instance
 2. Install, start, validate, and harden MariaDB
 3. Filter records with `WHERE`, `AND`, `OR`, `BETWEEN`, `IN`, `LIKE`, and `IS NULL`
-4. Use string, date, numeric, NULL-handling, and conditional functions
-5. Sort results with `ORDER BY`
-6. Summarize records with aggregate functions and `GROUP BY`
-7. Filter grouped results with `HAVING`
+4. Work with character strings and string functions
+5. Use conversion, date, mathematical, aggregate, and control flow functions
+6. Compare `DISTINCT`, `COUNT(*)`, `COUNT(column)`, and `COUNT(DISTINCT column)`
+7. Sort results with `ORDER BY`
+8. Summarize records with aggregate functions and `GROUP BY`
+9. Filter grouped results with `HAVING`
 
 ---
 
@@ -236,36 +238,132 @@ Other useful search operators are demonstrated in the SQL script:
 
 ---
 
-## Part 3 — Functions in Queries
+## Part 3 — Required Query Features
 
-Functions transform values or calculate new values:
+Run Sections 3–9 of `employee-search-demo.sql`. Each requested feature has its
+own query so you can change one expression at a time and compare the output.
+
+| Feature | Examples included |
+|---|---|
+| Aggregate functions | `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()` |
+| Conversion functions | `CAST()`, `CONVERT()` |
+| Date functions | `CURDATE()`, `YEAR()`, `MONTHNAME()`, `DATEDIFF()`, `TIMESTAMPDIFF()` |
+| String functions | `UPPER()`, `LOWER()`, `CONCAT()`, `TRIM()`, `SUBSTRING()`, `CHAR_LENGTH()` |
+| Mathematical functions | `ROUND()`, `CEILING()`, `FLOOR()`, `ABS()`, `MOD()` |
+| Control flow functions and expressions | `IF()`, `IFNULL()`, `CASE` |
+| Distinct values | `DISTINCT department` and `DISTINCT department, city` |
+| Counting | `COUNT(*)`, `COUNT(manager_id)`, `COUNT(DISTINCT department)` |
+| Character strings | Single-quoted literals, `VARCHAR` columns, concatenation, length, substring, trimming, and pattern matching |
+
+### Character strings and string functions
+
+Character strings are written inside single quotes, such as `'Active'` and
+`'%engineer%'`. Columns including `employee_name`, `department`, and `job_title`
+use `VARCHAR` because their text lengths vary.
 
 ```sql
 SELECT
     employee_name,
-    UPPER(department) AS department_upper,
-    ROUND(salary / 12, 2) AS monthly_salary,
-    YEAR(hire_date) AS hire_year
+    CHAR_LENGTH(employee_name) AS name_length,
+    SUBSTRING(employee_name, 1, 3) AS first_three_characters,
+    CONCAT(UPPER(department), ': ', TRIM(job_title)) AS employee_summary
 FROM employees
-WHERE LOWER(job_title) LIKE '%engineer%'
-ORDER BY monthly_salary DESC;
+WHERE LOWER(job_title) LIKE '%engineer%';
 ```
 
-The script also demonstrates:
+### Conversion functions
 
-| Function or expression | Purpose |
-|---|---|
-| `CONCAT()` | Join text values |
-| `TIMESTAMPDIFF()` | Calculate elapsed time |
-| `COALESCE()` | Replace a NULL result with another value |
-| `IF()` | Return one of two values based on a condition |
-| `CASE` | Return a category based on multiple conditions |
-| `COUNT()`, `AVG()`, `MIN()`, `MAX()` | Calculate group summaries |
+Use `CAST()` or `CONVERT()` when the result needs a different data type:
+
+```sql
+SELECT
+    employee_name,
+    CAST(employee_id AS CHAR) AS employee_id_text,
+    CAST(salary AS SIGNED) AS salary_whole_number,
+    CONVERT(hire_date, CHAR) AS hire_date_text
+FROM employees;
+```
+
+### Date functions
+
+```sql
+SELECT
+    employee_name,
+    YEAR(hire_date) AS hire_year,
+    MONTHNAME(hire_date) AS hire_month,
+    DATEDIFF(CURDATE(), hire_date) AS days_employed,
+    TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) AS completed_years
+FROM employees;
+```
 
 > **Performance note:** Applying a function to an indexed column in `WHERE` can
 > prevent normal index use. For production date searches, prefer a range such as
 > `hire_date >= '2024-01-01' AND hire_date < '2025-01-01'` over
 > `YEAR(hire_date) = 2024`.
+
+### Mathematical functions
+
+```sql
+SELECT
+    employee_name,
+    ROUND(salary / 12, 2) AS monthly_salary,
+    CEILING(salary / 12) AS monthly_salary_rounded_up,
+    FLOOR(salary / 12) AS monthly_salary_rounded_down,
+    ABS(salary - 70000) AS difference_from_70000,
+    MOD(employee_id, 2) AS employee_id_remainder
+FROM employees;
+```
+
+### Control flow functions and expressions
+
+`IF()` handles two outcomes, while `CASE` is clearer for multiple outcomes.
+`IFNULL()` supplies a replacement when a value is NULL.
+
+```sql
+SELECT
+    employee_name,
+    IF(employment_status = 'Active', 'Available', 'Unavailable') AS availability,
+    IFNULL(CAST(manager_id AS CHAR), 'No Manager') AS manager_reference,
+    CASE
+        WHEN salary >= 90000 THEN 'Senior Salary Band'
+        WHEN salary >= 60000 THEN 'Mid Salary Band'
+        ELSE 'Entry Salary Band'
+    END AS salary_band
+FROM employees;
+```
+
+### `DISTINCT` and `COUNT`
+
+```sql
+SELECT DISTINCT department
+FROM employees
+ORDER BY department;
+
+SELECT
+    COUNT(*) AS total_employees,
+    COUNT(manager_id) AS employees_with_manager,
+    COUNT(DISTINCT department) AS distinct_departments
+FROM employees;
+```
+
+- `DISTINCT` removes duplicate result rows.
+- `COUNT(*)` counts every row.
+- `COUNT(manager_id)` counts only rows whose `manager_id` is not NULL.
+- `COUNT(DISTINCT department)` counts unique, non-NULL departments.
+
+### Aggregate functions
+
+Aggregate functions calculate one result from multiple rows:
+
+```sql
+SELECT
+    COUNT(*) AS employee_count,
+    SUM(salary) AS total_salary,
+    ROUND(AVG(salary), 2) AS average_salary,
+    MIN(salary) AS lowest_salary,
+    MAX(salary) AS highest_salary
+FROM employees;
+```
 
 ---
 
@@ -329,6 +427,17 @@ the SQL file repeat these challenges but do not provide the completed queries.
    least three employees.
 3. Find employees whose job title contains `Manager` and display how many
    completed years they have worked.
+4. Display each employee ID as character text, and convert each salary to a
+   signed whole number.
+5. Display monthly salary rounded to two decimal places and salary after a 5%
+   increase.
+6. Use `IF()` or `CASE` to label each employee as `Active Staff`, `Temporarily
+   Unavailable`, or `Former Staff`.
+7. Return every distinct department and city combination.
+8. Return the total row count, count of non-NULL manager IDs, and count of
+   distinct departments in one result.
+9. Use character-string functions to display an uppercase employee label and the
+   number of characters in each employee's name.
 
 For every query, verify both the returned rows and the column headings. A query
 that runs without an error can still implement the wrong business condition.

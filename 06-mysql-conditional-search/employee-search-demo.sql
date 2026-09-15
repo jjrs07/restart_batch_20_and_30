@@ -116,49 +116,71 @@ WHERE hire_date >= '2024-01-01'
 ORDER BY hire_date;
 
 -- ================================================================
--- 3. Built-in functions in queries
+-- 3. Character strings and string functions
 -- ================================================================
 
--- String functions
+-- Character strings are enclosed in single quotes. VARCHAR columns such as
+-- employee_name, department, and job_title store variable-length strings.
 SELECT
     employee_name,
-    UPPER(department) AS department_upper,
-    CONCAT(employee_name, ' - ', job_title) AS employee_summary
+    CHAR_LENGTH(employee_name) AS name_length,
+    SUBSTRING(employee_name, 1, 3) AS first_three_characters,
+    CONCAT(UPPER(department), ': ', TRIM(job_title)) AS employee_summary
 FROM employees
 WHERE LOWER(job_title) LIKE '%engineer%'
 ORDER BY employee_name;
 
--- Date functions
+-- ================================================================
+-- 4. Conversion functions
+-- ================================================================
+
+SELECT
+    employee_name,
+    CAST(employee_id AS CHAR) AS employee_id_text,
+    CAST(salary AS SIGNED) AS salary_whole_number,
+    CONVERT(hire_date, CHAR) AS hire_date_text
+FROM employees
+ORDER BY employee_id;
+
+-- ================================================================
+-- 5. Date functions
+-- ================================================================
+
 SELECT
     employee_name,
     hire_date,
     YEAR(hire_date) AS hire_year,
+    MONTHNAME(hire_date) AS hire_month,
+    DATEDIFF(CURDATE(), hire_date) AS days_employed,
     TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) AS completed_years
 FROM employees
-WHERE TIMESTAMPDIFF(YEAR, hire_date, CURDATE()) >= 3
+WHERE hire_date < CURDATE()
 ORDER BY hire_date;
 
--- Numeric function
+-- ================================================================
+-- 6. Mathematical functions
+-- ================================================================
+
 SELECT
     employee_name,
     salary AS annual_salary,
-    ROUND(salary / 12, 2) AS monthly_salary
+    ROUND(salary / 12, 2) AS monthly_salary,
+    CEILING(salary / 12) AS monthly_salary_rounded_up,
+    FLOOR(salary / 12) AS monthly_salary_rounded_down,
+    ABS(salary - 70000) AS difference_from_70000,
+    MOD(employee_id, 2) AS employee_id_remainder
 FROM employees
 WHERE salary >= 80000
 ORDER BY monthly_salary DESC;
 
--- NULL-handling and conditional functions
-SELECT
-    employee_name,
-    COALESCE(CAST(manager_id AS CHAR), 'No Manager') AS manager_reference,
-    IF(employment_status = 'Active', 'Available', 'Unavailable') AS availability
-FROM employees
-ORDER BY employee_name;
+-- ================================================================
+-- 7. Control flow functions and expressions
+-- ================================================================
 
--- CASE supports more than two conditions
 SELECT
     employee_name,
-    salary,
+    IF(employment_status = 'Active', 'Available', 'Unavailable') AS availability,
+    IFNULL(CAST(manager_id AS CHAR), 'No Manager') AS manager_reference,
     CASE
         WHEN salary >= 90000 THEN 'Senior Salary Band'
         WHEN salary >= 60000 THEN 'Mid Salary Band'
@@ -168,7 +190,43 @@ FROM employees
 ORDER BY salary DESC;
 
 -- ================================================================
--- 4. Organize data with ORDER BY
+-- 8. DISTINCT and COUNT
+-- ================================================================
+
+-- DISTINCT removes duplicate result rows
+SELECT DISTINCT department
+FROM employees
+ORDER BY department;
+
+-- DISTINCT can evaluate a unique combination of multiple columns
+SELECT DISTINCT department, city
+FROM employees
+ORDER BY department, city;
+
+-- COUNT(*) counts rows; COUNT(column) ignores NULL values; and
+-- COUNT(DISTINCT column) counts unique non-NULL values.
+SELECT
+    COUNT(*) AS total_employees,
+    COUNT(manager_id) AS employees_with_manager,
+    COUNT(*) - COUNT(manager_id) AS employees_without_manager,
+    COUNT(DISTINCT department) AS distinct_departments,
+    COUNT(DISTINCT city) AS distinct_cities
+FROM employees;
+
+-- ================================================================
+-- 9. Aggregate functions
+-- ================================================================
+
+SELECT
+    COUNT(*) AS employee_count,
+    SUM(salary) AS total_salary,
+    ROUND(AVG(salary), 2) AS average_salary,
+    MIN(salary) AS lowest_salary,
+    MAX(salary) AS highest_salary
+FROM employees;
+
+-- ================================================================
+-- 10. Organize data with ORDER BY
 -- ================================================================
 
 -- Sort departments alphabetically, then salaries highest to lowest
@@ -177,7 +235,7 @@ FROM employees
 ORDER BY department ASC, salary DESC;
 
 -- ================================================================
--- 5. Summarize data with GROUP BY
+-- 11. Summarize data with GROUP BY
 -- ================================================================
 
 SELECT
@@ -192,7 +250,7 @@ GROUP BY department
 ORDER BY average_salary DESC;
 
 -- ================================================================
--- 6. Filter grouped results with HAVING
+-- 12. Filter grouped results with HAVING
 -- ================================================================
 
 -- WHERE filters rows before grouping; HAVING filters groups afterward
@@ -208,7 +266,7 @@ HAVING COUNT(*) >= 2
 ORDER BY average_active_salary DESC;
 
 -- ================================================================
--- 7. Optional challenge queries
+-- 13. Practice challenge queries
 -- ================================================================
 
 -- Challenge 1: Find active employees in Manila or Makati who earn at
@@ -219,3 +277,20 @@ ORDER BY average_active_salary DESC;
 
 -- Challenge 3: Find employees whose job title contains "Manager" and
 -- display how many completed years they have worked.
+
+-- Challenge 4: Display each employee ID as character text, and convert
+-- each salary to a signed whole number.
+
+-- Challenge 5: Display monthly salary rounded to two decimal places and
+-- the employee's salary after a 5 percent increase.
+
+-- Challenge 6: Use IF or CASE to label each employee as Active Staff,
+-- Temporarily Unavailable, or Former Staff.
+
+-- Challenge 7: Return every distinct department and city combination.
+
+-- Challenge 8: Return the total row count, the count of non-NULL manager
+-- IDs, and the count of distinct departments in one result.
+
+-- Challenge 9: Use character-string functions to display an uppercase
+-- employee label and the number of characters in each employee's name.
