@@ -49,7 +49,7 @@ sudo apt-get install -y git
 
 ```bash
 cd ~
-git clone https://github.com/jjrs07/restart_batch_29.git restart-demo
+git clone https://github.com/jjrs07/restart_batch_20_and_30.git restart-demo
 cd restart-demo
 ```
 
