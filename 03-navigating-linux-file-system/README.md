@@ -1,8 +1,9 @@
 # Navigating the Linux File System — Absolute vs Relative Paths
 
-**AWS re/Start — Batch 29 and 30**
-**Duration:** 35–50 minutes
-**Format:** Follow along in your own terminal (WSL, EC2, or any Linux shell). Type every command yourself — don't copy-paste the whole thing.
+**AWS re/Start — Batch 29 and 30**<br>
+**Duration:** 35–50 minutes<br>
+**Format:** Independent, self-paced Linux terminal activity<br>
+**Region:** Not applicable for local Linux; use `us-east-2` (Ohio) if using EC2
 
 ---
 
