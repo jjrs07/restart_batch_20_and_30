@@ -16,6 +16,7 @@ for today's session and follow its `README.md`.
 | 04 | **Linux Log Management** | Generate logs, automate them with cron, estimate log growth, configure logrotate retention, and troubleshoot Linux services with `journalctl`. | [`04-linux-log-management/`](04-linux-log-management/) |
 | 05 | **Downloading with curl and wget** | Compare `curl` and `wget`, download the AWS CLI installer with both tools, and choose the right command for common use cases. | [`05-curl-vs-wget/`](05-curl-vs-wget/) |
 | 06 | **MySQL Conditional Search and Data Organization** | Build an Amazon Linux 2023 EC2 instance, install MariaDB, query a 30-employee dataset, and organize results with `ORDER BY`, `GROUP BY`, and `HAVING`. | [`06-mysql-conditional-search/`](06-mysql-conditional-search/) |
+| 07 | **Securing a Web Application with AWS Certificate Manager (ACM), Application Load Balancer, and HTTPS** | Deploy Apache on EC2, route traffic through an Application Load Balancer, validate an ACM certificate with public DNS, enable HTTPS, redirect HTTP, and troubleshoot failures. | [`07-acm-alb-https/`](07-acm-alb-https/) |
 
 More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
