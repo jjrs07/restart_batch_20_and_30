@@ -1,6 +1,6 @@
 # Amazon S3 Hands-On Walkthrough (AWS Management Console)
 
-**AWS re/Start — Batch 29**
+**AWS re/Start — Batch 29 and 30**
 **Duration:** 45–60 minutes
 **Format:** Follow along with your instructor. Do every step in your own sandbox account.
 
@@ -123,7 +123,7 @@ Fill in the form:
 3. Create a small text file on your laptop first. Name it `hello.txt` and put this inside:
 
 ```
-Hello from AWS re/Start Batch 29 - version 1
+Hello from AWS re/Start Batch 29 and 30 - version 1
 ```
 
 4. Upload it. Leave all the defaults. Click **Upload**. Click **Close**.
@@ -170,7 +170,7 @@ Versioning protects you from accidental overwrite and accidental delete. This is
 3. Edit `hello.txt` on your laptop. Change the text to:
 
 ```
-Hello from AWS re/Start Batch 29 - version 2
+Hello from AWS re/Start Batch 29 and 30 - version 2
 ```
 
 4. Upload it again to the **root** of the bucket (same key, `hello.txt`).
@@ -470,4 +470,4 @@ You do not need to configure these today, but you should be able to say what the
 
 ---
 
-*AWS re/Start Batch 29 — Amazon S3 Hands-On Walkthrough*
+*AWS re/Start Batch 29 and 30 — Amazon S3 Hands-On Walkthrough*
