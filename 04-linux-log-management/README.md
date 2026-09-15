@@ -1,6 +1,6 @@
 # Linux Log Management — Cron, Rotation, Retention & journalctl
 
-**AWS re/Start — Batch 29**
+**AWS re/Start — Batch 29 and 30**
 
 **Duration:** 60–75 minutes
 
@@ -13,7 +13,7 @@
 You need a Linux shell, Bash, and a system that uses systemd for the journal sections. Amazon Linux on EC2 is the main target. Commands are generic where practical, but service names and traditional log files differ between distributions.
 
 ```bash
-cd ~/restart_batch_29/04-linux-log-management
+cd ~/restart_batch_20_and_30/04-linux-log-management
 chmod +x scripts/*.sh
 ```
 
@@ -151,7 +151,7 @@ cat cron/crontab-example.txt
 The sample schedule is:
 
 ```cron
-*/5 * * * * /home/ec2-user/restart_batch_29/04-linux-log-management/scripts/generate-log.sh
+*/5 * * * * /home/ec2-user/restart_batch_20_and_30/04-linux-log-management/scripts/generate-log.sh
 ```
 
 The actual absolute path depends on where you cloned the repository. Find yours with `pwd`; cron should not have to guess the working directory.
@@ -426,7 +426,7 @@ Before running it, use `ls -la ~/log-demo` and confirm it contains only this lab
 
 A concise 15–20 minute sequence:
 
-1. Enter the lab: `cd ~/restart_batch_29/04-linux-log-management`.
+1. Enter the lab: `cd ~/restart_batch_20_and_30/04-linux-log-management`.
 2. Make scripts executable: `chmod +x scripts/*.sh`.
 3. Generate one entry: `./scripts/generate-log.sh`.
 4. Show it: `cat ~/log-demo/app.log`.
@@ -444,4 +444,4 @@ A concise 15–20 minute sequence:
 
 ---
 
-*AWS re/Start Batch 29 — Linux Log Management Hands-On Lab*
+*AWS re/Start Batch 29 and 30 — Linux Log Management Hands-On Lab*
