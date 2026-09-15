@@ -1,4 +1,4 @@
--- AWS re/Start Batch 29
+-- AWS re/Start Batch 29 and 30
 -- MySQL Conditional Search and Data Organization Demo
 -- Target: MariaDB 10.5+ or MySQL 8.0+
 -- Salary values are illustrative gross monthly Philippine pesos (PHP).
