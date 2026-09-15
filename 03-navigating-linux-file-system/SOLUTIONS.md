@@ -1,7 +1,7 @@
 # Solutions — Navigating the Linux File System
 
 > Try the challenges yourself first! These assume you start at **base camp**:
-> `.../practice/cloudmart`. Replace `~/restart_batch_29` with wherever you cloned the repo.
+> `.../practice/cloudmart`. Replace `~/restart_batch_20_and_30` with wherever you cloned the repo.
 
 ## Part 7 — Challenges
 
@@ -21,7 +21,7 @@ Read it as: up out of `beta` → `projects` → `engineering` → into `departme
 
 **3. To the 2025 finance report (absolute), from anywhere:**
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/finance/reports/2025
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/finance/reports/2025
 cat q4.txt
 ```
 (Absolute path — starts from `~`, which expands to `/home/<you>`.)
@@ -55,7 +55,7 @@ Both paths are **relative** (neither starts with `/`), so Linux resolves them fr
 **8. From `/`, copy CloudMart's top `README.txt` to `/tmp` (absolute):**
 ```bash
 cd /
-cp ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/README.txt /tmp/cloudmart-readme.txt
+cp ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/README.txt /tmp/cloudmart-readme.txt
 cat /tmp/cloudmart-readme.txt
 ```
 The source starts with `~` (which expands to `/home/<you>/...`, an **absolute** path), so it works even though you're sitting at `/`. `/tmp/cloudmart-readme.txt` is **absolute** too. A relative source like `README.txt` would have failed here — there's no `README.txt` at `/`.
@@ -85,7 +85,7 @@ pwd     # still shows /
    ```
 3. Absolute (same target):
    ```bash
-   cat ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/engineering/team.txt
+   cat ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/engineering/team.txt
    ```
 4. `cd -` jumps back to the **previous** directory you were in (a toggle between two locations).
 5. `./` means "in **this** folder." Without it, the shell only looks in the directories listed in `$PATH`, and your local `setup.sh` isn't there, so it wouldn't be found.
@@ -95,4 +95,4 @@ pwd     # still shows /
 
 ---
 
-*AWS re/Start Batch 29 — instructor answer key.*
+*AWS re/Start Batch 29 and 30 — instructor answer key.*
