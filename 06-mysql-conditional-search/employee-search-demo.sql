@@ -11,7 +11,8 @@ USE conditional_search_demo;
 
 CREATE TABLE employees (
     employee_id INT PRIMARY KEY,
-    employee_name VARCHAR(100) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
     department VARCHAR(50) NOT NULL,
     job_title VARCHAR(50) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
@@ -24,7 +25,8 @@ CREATE TABLE employees (
 
 INSERT INTO employees (
     employee_id,
-    employee_name,
+    first_name,
+    last_name,
     department,
     job_title,
     salary,
@@ -34,26 +36,26 @@ INSERT INTO employees (
     hire_date
 )
 VALUES
-    (1,  'Ana Cruz',         'IT',         'Cloud Engineer',        85000.00, 'Active',   'Manila',      5,    '2022-03-15'),
-    (2,  'Ben Santos',       'IT',         'Database Administrator',92000.00, 'Active',   'Quezon City', 5,    '2021-07-01'),
-    (3,  'Carla Reyes',      'Finance',    'Accountant',            58000.00, 'On Leave', 'Makati',      7,    '2023-01-10'),
-    (4,  'David Lim',        'HR',         'Recruiter',             52000.00, 'Active',   'Pasig',       9,    '2024-02-20'),
-    (5,  'Ella Tan',         'IT',         'DevOps Manager',        98000.00, 'Active',   'Makati',      NULL, '2020-11-05'),
-    (6,  'Fred Garcia',      'Sales',      'Sales Associate',       45000.00, 'Inactive', 'Manila',      8,    '2019-06-18'),
-    (7,  'Grace Lee',        'Finance',    'Finance Manager',       72000.00, 'Active',   'Taguig',      NULL, '2022-09-12'),
-    (8,  'Henry Ong',        'Sales',      'Sales Manager',         88000.00, 'Active',   'Pasig',       NULL, '2018-04-25'),
-    (9,  'Ivy Ramos',        'HR',         'HR Manager',            81000.00, 'Active',   'Manila',      NULL, '2019-08-14'),
-    (10, 'John Flores',      'IT',         'Support Engineer',      48000.00, 'On Leave', 'Quezon City', 5,    '2024-05-06'),
-    (11, 'Karen Mendoza',    'IT',         'Systems Administrator', 68000.00, 'Active',   'Taguig',      5,    '2023-06-19'),
-    (12, 'Leo Bautista',     'Finance',    'Senior Accountant',     79000.00, 'Active',   'Makati',      7,    '2020-02-11'),
-    (13, 'Maria Villanueva', 'HR',         'HR Specialist',         56000.00, 'Active',   'Quezon City', 9,    '2022-12-05'),
-    (14, 'Nathan Chua',      'Sales',      'Sales Associate',       47000.00, 'Active',   'Manila',      8,    '2024-07-08'),
-    (15, 'Olivia Navarro',   'IT',         'Security Engineer',     95000.00, 'On Leave', 'Pasig',       5,    '2021-09-27'),
-    (16, 'Paul Aquino',      'Operations', 'Operations Analyst',    61000.00, 'Active',   'Taguig',      18,   '2023-04-17'),
-    (17, 'Queenie Dela Cruz','Marketing',  'Marketing Specialist',  54000.00, 'Active',   'Makati',      20,   '2024-01-22'),
-    (18, 'Robert Castillo',  'Operations', 'Operations Manager',    86000.00, 'Active',   'Manila',      NULL, '2019-10-30'),
-    (19, 'Sophia Torres',    'Finance',    'Payroll Specialist',    63000.00, 'Inactive', 'Pasig',       7,    '2022-05-16'),
-    (20, 'Thomas Yu',        'Marketing',  'Marketing Manager',     83000.00, 'Active',   'Quezon City', NULL, '2020-08-03');
+    (1,  'Ana',    'Cruz',        'IT',         'Cloud Engineer',         85000.00, 'Active',   'Manila',      5,    '2022-03-15'),
+    (2,  'Ben',    'Santos',      'IT',         'Database Administrator', 92000.00, 'Active',   'Quezon City', 5,    '2021-07-01'),
+    (3,  'Carla',  'Reyes',       'Finance',    'Accountant',             58000.00, 'On Leave', 'Makati',      7,    '2023-01-10'),
+    (4,  'David',  'Lim',         'HR',         'Recruiter',              52000.00, 'Active',   'Pasig',       9,    '2024-02-20'),
+    (5,  'Ella',   'Tan',         'IT',         'DevOps Manager',         98000.00, 'Active',   'Makati',      NULL, '2020-11-05'),
+    (6,  'Fred',   'Garcia',      'Sales',      'Sales Associate',        45000.00, 'Inactive', 'Manila',      8,    '2019-06-18'),
+    (7,  'Grace',  'Lee',         'Finance',    'Finance Manager',        72000.00, 'Active',   'Taguig',      NULL, '2022-09-12'),
+    (8,  'Henry',  'Ong',         'Sales',      'Sales Manager',          88000.00, 'Active',   'Pasig',       NULL, '2018-04-25'),
+    (9,  'Ivy',    'Ramos',       'HR',         'HR Manager',             81000.00, 'Active',   'Manila',      NULL, '2019-08-14'),
+    (10, 'John',   'Flores',      'IT',         'Support Engineer',       48000.00, 'On Leave', 'Quezon City', 5,    '2024-05-06'),
+    (11, 'Karen',  'Mendoza',     'IT',         'Systems Administrator',  68000.00, 'Active',   'Taguig',      5,    '2023-06-19'),
+    (12, 'Leo',    'Bautista',    'Finance',    'Senior Accountant',      79000.00, 'Active',   'Makati',      7,    '2020-02-11'),
+    (13, 'Maria',  'Villanueva',  'HR',         'HR Specialist',          56000.00, 'Active',   'Quezon City', 9,    '2022-12-05'),
+    (14, 'Nathan', 'Chua',        'Sales',      'Sales Associate',        47000.00, 'Active',   'Manila',      8,    '2024-07-08'),
+    (15, 'Olivia', 'Navarro',     'IT',         'Security Engineer',      95000.00, 'On Leave', 'Pasig',       5,    '2021-09-27'),
+    (16, 'Paul',   'Aquino',      'Operations', 'Operations Analyst',     61000.00, 'Active',   'Taguig',      18,   '2023-04-17'),
+    (17, 'Queenie','Dela Cruz',   'Marketing',  'Marketing Specialist',   54000.00, 'Active',   'Makati',      20,   '2024-01-22'),
+    (18, 'Robert', 'Castillo',    'Operations', 'Operations Manager',     86000.00, 'Active',   'Manila',      NULL, '2019-10-30'),
+    (19, 'Sophia', 'Torres',      'Finance',    'Payroll Specialist',     63000.00, 'Inactive', 'Pasig',       7,    '2022-05-16'),
+    (20, 'Thomas', 'Yu',          'Marketing',  'Marketing Manager',      83000.00, 'Active',   'Quezon City', NULL, '2020-08-03');
 
 -- ================================================================
 -- 1. Validate the dataset
@@ -63,6 +65,10 @@ SELECT COUNT(*) AS total_employees
 FROM employees;
 
 -- Expected result: 20
+
+DESCRIBE employees;
+
+-- Expected columns include first_name and last_name; employee_name is removed.
 
 -- ================================================================
 -- 2. Conditional searches with WHERE
@@ -74,42 +80,42 @@ FROM employees
 WHERE department = 'IT';
 
 -- Multiple required conditions
-SELECT employee_name, department, salary, employment_status
+SELECT first_name, last_name, department, salary, employment_status
 FROM employees
 WHERE department = 'IT'
   AND employment_status = 'Active'
   AND salary >= 80000;
 
 -- Alternative conditions; parentheses make the intent explicit
-SELECT employee_name, department, employment_status
+SELECT first_name, last_name, department, employment_status
 FROM employees
 WHERE employment_status = 'Active'
   AND (department = 'IT' OR department = 'Finance');
 
 -- Search a numeric range
-SELECT employee_name, salary
+SELECT first_name, last_name, salary
 FROM employees
 WHERE salary BETWEEN 50000 AND 80000
 ORDER BY salary DESC;
 
 -- Search a list of values
-SELECT employee_name, city
+SELECT first_name, last_name, city
 FROM employees
 WHERE city IN ('Manila', 'Makati', 'Taguig')
-ORDER BY city, employee_name;
+ORDER BY city, last_name, first_name;
 
 -- Search part of a string
-SELECT employee_name, job_title
+SELECT first_name, last_name, job_title
 FROM employees
 WHERE job_title LIKE '%Engineer%';
 
 -- Search for missing values
-SELECT employee_name, job_title
+SELECT first_name, last_name, job_title
 FROM employees
 WHERE manager_id IS NULL;
 
 -- Use a range instead of YEAR(hire_date) so an index on hire_date can be used
-SELECT employee_name, hire_date
+SELECT first_name, last_name, hire_date
 FROM employees
 WHERE hire_date >= '2024-01-01'
   AND hire_date < '2025-01-01'
@@ -120,22 +126,25 @@ ORDER BY hire_date;
 -- ================================================================
 
 -- Character strings are enclosed in single quotes. VARCHAR columns such as
--- employee_name, department, and job_title store variable-length strings.
+-- first_name, last_name, department, and job_title store variable-length strings.
 SELECT
-    employee_name,
-    CHAR_LENGTH(employee_name) AS name_length,
-    SUBSTRING(employee_name, 1, 3) AS first_three_characters,
+    first_name,
+    last_name,
+    CONCAT(first_name, ' ', last_name) AS full_name,
+    CHAR_LENGTH(CONCAT(first_name, ' ', last_name)) AS full_name_length,
+    SUBSTRING(first_name, 1, 3) AS first_three_characters,
     CONCAT(UPPER(department), ': ', TRIM(job_title)) AS employee_summary
 FROM employees
 WHERE LOWER(job_title) LIKE '%engineer%'
-ORDER BY employee_name;
+ORDER BY last_name, first_name;
 
 -- ================================================================
 -- 4. Conversion functions
 -- ================================================================
 
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     CAST(employee_id AS CHAR) AS employee_id_text,
     CAST(salary AS SIGNED) AS salary_whole_number,
     CONVERT(hire_date, CHAR) AS hire_date_text
@@ -147,7 +156,8 @@ ORDER BY employee_id;
 -- ================================================================
 
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     hire_date,
     YEAR(hire_date) AS hire_year,
     MONTHNAME(hire_date) AS hire_month,
@@ -162,7 +172,8 @@ ORDER BY hire_date;
 -- ================================================================
 
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     salary AS annual_salary,
     ROUND(salary / 12, 2) AS monthly_salary,
     CEILING(salary / 12) AS monthly_salary_rounded_up,
@@ -178,7 +189,8 @@ ORDER BY monthly_salary DESC;
 -- ================================================================
 
 SELECT
-    employee_name,
+    first_name,
+    last_name,
     IF(employment_status = 'Active', 'Available', 'Unavailable') AS availability,
     IFNULL(CAST(manager_id AS CHAR), 'No Manager') AS manager_reference,
     CASE
@@ -230,7 +242,7 @@ FROM employees;
 -- ================================================================
 
 -- Sort departments alphabetically, then salaries highest to lowest
-SELECT employee_name, department, salary
+SELECT first_name, last_name, department, salary
 FROM employees
 ORDER BY department ASC, salary DESC;
 
@@ -293,4 +305,5 @@ ORDER BY average_active_salary DESC;
 -- IDs, and the count of distinct departments in one result.
 
 -- Challenge 9: Use character-string functions to display an uppercase
--- employee label and the number of characters in each employee's name.
+-- full name from first_name and last_name, plus the number of characters
+-- in the combined name.
