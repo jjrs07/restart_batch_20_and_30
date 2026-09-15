@@ -1,8 +1,9 @@
 # Amazon S3 Hands-On Walkthrough (AWS Management Console)
 
-**AWS re/Start — Batch 29 and 30**
-**Duration:** 45–60 minutes
-**Format:** Follow along with your instructor. Do every step in your own sandbox account.
+**AWS re/Start — Batch 29 and 30**<br>
+**Duration:** 45–60 minutes<br>
+**Format:** Independent, self-paced AWS Management Console activity<br>
+**Region:** `us-east-2` (Ohio)
 
 ---
 
@@ -10,7 +11,7 @@
 
 | Item | Value |
 |---|---|
-| Region | `us-east-1` (N. Virginia) — **use the same Region as your instructor the whole time** |
+| Region | `us-east-2` (Ohio) — **use this Region for the whole activity** |
 | Your initials | e.g. `jdc` — you will use this in your bucket name |
 | Today's date | e.g. `20260806` |
 
@@ -90,7 +91,7 @@ This tells you at a glance who owns it, which environment it belongs to, what it
 ## Part 2 — Create the Bucket (5 min)
 
 1. Sign in to the **AWS Management Console**.
-2. Top right — confirm your **Region** says **N. Virginia (us-east-1)**.
+2. Top right — confirm your **Region** says **Ohio (us-east-2)**.
 3. In the search bar type **S3** and open the S3 console.
 4. Click **Create bucket**.
 
@@ -100,7 +101,7 @@ Fill in the form:
 |---|---|---|
 | **Bucket type** | General purpose | Directory buckets are for S3 Express One Zone (very low latency, single AZ). Not needed here. |
 | **Bucket name** | `restart-b29-<initials>-<date>` | Global uniqueness |
-| **Region** | US East (N. Virginia) us-east-1 | Data residency and latency |
+| **Region** | US East (Ohio) us-east-2 | Data residency and latency |
 | **Copy settings from existing bucket** | Skip | |
 | **Object Ownership** | **ACLs disabled (recommended)** — leave as is | ACLs are legacy. Modern access control is IAM + bucket policy. |
 | **Block Public Access** | **Leave ALL FOUR boxes checked** | This is your safety net |
@@ -139,7 +140,7 @@ You should see:
 
 ```
 Key:  logs/hello.txt
-URL:  https://restart-b29-jdc-20260806.s3.us-east-1.amazonaws.com/logs/hello.txt
+URL:  https://restart-b29-jdc-20260806.s3.us-east-2.amazonaws.com/logs/hello.txt
 ```
 
 8. **Copy the Object URL and paste it into a new browser tab.**
