@@ -1,6 +1,6 @@
 # Downloading Files with `curl` and `wget`
 
-**AWS re/Start — Batch 29**<br>
+**AWS re/Start — Batch 29 and 30**<br>
 **Duration:** 20–30 minutes<br>
 **Format:** Follow along in a Linux terminal (WSL, EC2, or a lab machine).
 
@@ -231,4 +231,4 @@ wget -c "URL" -O "filename"
 
 ---
 
-*AWS re/Start Batch 29 — Downloading Files with `curl` and `wget`*
+*AWS re/Start Batch 29 and 30 — Downloading Files with `curl` and `wget`*
