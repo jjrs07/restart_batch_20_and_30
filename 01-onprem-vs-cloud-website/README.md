@@ -1,5 +1,10 @@
 # ReStart Deploy Demo — On-Prem vs Cloud
 
+**AWS re/Start — Batch 29 and 30**<br>
+**Duration:** 60–90 minutes<br>
+**Format:** Independent, self-paced Linux terminal and AWS Management Console activity<br>
+**Region:** `us-east-2` (Ohio) for the EC2 deployment
+
 One identical web app, deployed to **two environments** so students can *see* that
 deployment is about the **environment**, not the code.
 
