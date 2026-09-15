@@ -1,6 +1,6 @@
 # MySQL Conditional Search and Data Organization
 
-**AWS re/Start — Batch 29**<br>
+**AWS re/Start — Batch 29 and 30**<br>
 **Duration:** 60–75 minutes<br>
 **Format:** Build an Amazon EC2 instance, install MariaDB, and run the activity from the command line.
 
@@ -84,7 +84,7 @@ use `CONCAT(first_name, ' ', last_name)` when a full display name is needed.
 
    | Setting | Value |
    |---|---|
-   | Name | `batch29-mariadb-lab` |
+   | Name | `batch29-30-mariadb-lab` |
    | AMI | Amazon Linux 2023 AMI, 64-bit x86 |
    | Instance type | `t3.micro`, or the small instance type permitted by your sandbox |
    | Key pair | Select an existing lab key pair or create a new `.pem` key pair |
@@ -92,7 +92,7 @@ use `CONCAT(first_name, ' ', last_name)` when a full display name is needed.
    | Public IPv4 | Enabled so the student can connect by SSH |
    | Storage | 8 GiB `gp3`, encrypted |
 
-4. Create a security group named `batch29-mariadb-sg` with one inbound rule:
+4. Create a security group named `batch29-30-mariadb-sg` with one inbound rule:
 
    | Type | Protocol | Port | Source |
    |---|---|---:|---|
@@ -112,14 +112,14 @@ Copy the instance's **Public DNS name** from the EC2 console. From Linux, macOS,
 or WSL, protect the downloaded key and connect:
 
 ```bash
-chmod 400 batch29-mariadb.pem
-ssh -i batch29-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
+chmod 400 batch29-30-mariadb.pem
+ssh -i batch29-30-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
 ```
 
 From Windows PowerShell, use:
 
 ```powershell
-ssh -i .\batch29-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
+ssh -i .\batch29-30-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
 ```
 
 Replace the key filename and DNS name with your actual values. Amazon Linux uses
@@ -176,8 +176,8 @@ it in shell commands, scripts, screenshots, or Git.
 Clone this repository on the EC2 instance and enter the lab folder:
 
 ```bash
-git clone https://github.com/jjrs07/restart_batch_29.git
-cd restart_batch_29/06-mysql-conditional-search
+git clone https://github.com/jjrs07/restart_batch_20_and_30.git
+cd restart_batch_20_and_30/06-mysql-conditional-search
 ```
 
 Confirm that both activity files are present:
@@ -549,7 +549,7 @@ sudo mariadb --batch --skip-column-names -e \
   "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'conditional_search_demo';"
 ```
 
-Then return to the EC2 console and terminate `batch29-mariadb-lab`. Verify that
+Then return to the EC2 console and terminate `batch29-30-mariadb-lab`. Verify that
 the instance reaches the `Terminated` state. Delete the lab-only security group
 and key pair if your instructor does not need them for another activity.
 
@@ -659,4 +659,4 @@ compensation advice or guaranteed market rates.
 
 ---
 
-*AWS re/Start Batch 29 — MySQL Conditional Search and Data Organization*
+*AWS re/Start Batch 29 and 30 — MySQL Conditional Search and Data Organization*
