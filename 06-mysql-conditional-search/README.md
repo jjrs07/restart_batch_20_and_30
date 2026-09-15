@@ -2,7 +2,8 @@
 
 **AWS re/Start — Batch 29 and 30**<br>
 **Duration:** 60–75 minutes<br>
-**Format:** Build an Amazon EC2 instance, install MariaDB, and run the activity from the command line.
+**Format:** Independent, self-paced AWS Management Console and MariaDB command-line activity<br>
+**Region:** `us-east-2` (Ohio)
 
 ---
 
@@ -28,7 +29,7 @@ By the end of this activity, you will be able to:
 | Item | Requirement |
 |---|---|
 | AWS access | A sandbox account with permission to launch and terminate EC2 instances and manage security groups and key pairs |
-| Region | Use the same Region as your instructor; the examples use `us-east-1` |
+| Region | `us-east-2` (Ohio) for all AWS resources in this activity |
 | Compute | One disposable Amazon Linux 2023 EC2 instance |
 | Database | MariaDB 10.5 or later, installed during this activity |
 | Database access | Local administrative access through `sudo mariadb`; no remote database port is required |
@@ -78,7 +79,7 @@ use `CONCAT(first_name, ' ', last_name)` when a full display name is needed.
 
 ### Step 1: Launch the EC2 instance
 
-1. Open the **Amazon EC2 console** in the Region selected by your instructor.
+1. Open the **Amazon EC2 console** in `us-east-2` (Ohio).
 2. Choose **Launch instance**.
 3. Configure the instance:
 
