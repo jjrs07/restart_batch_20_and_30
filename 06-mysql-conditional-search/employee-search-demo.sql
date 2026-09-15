@@ -1,6 +1,6 @@
 -- AWS re/Start Batch 29
 -- MySQL Conditional Search and Data Organization Demo
--- Target: MySQL 8.0+
+-- Target: MariaDB 10.5+ or MySQL 8.0+
 --
 -- WARNING: This script recreates the conditional_search_demo database.
 -- Run it only in a classroom or disposable MySQL environment.

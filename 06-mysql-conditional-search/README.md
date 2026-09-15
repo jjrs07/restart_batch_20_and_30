@@ -1,8 +1,8 @@
 # MySQL Conditional Search and Data Organization
 
 **AWS re/Start — Batch 29**<br>
-**Duration:** 35–45 minutes<br>
-**Format:** Follow along in MySQL Workbench or the MySQL command-line client.
+**Duration:** 60–75 minutes<br>
+**Format:** Build an Amazon EC2 instance, install MariaDB, and run the activity from the command line.
 
 ---
 
@@ -10,11 +10,13 @@
 
 By the end of this activity, you will be able to:
 
-1. Filter records with `WHERE`, `AND`, `OR`, `BETWEEN`, `IN`, `LIKE`, and `IS NULL`
-2. Use string, date, numeric, NULL-handling, and conditional functions
-3. Sort results with `ORDER BY`
-4. Summarize records with aggregate functions and `GROUP BY`
-5. Filter grouped results with `HAVING`
+1. Launch and securely connect to an Amazon Linux 2023 EC2 instance
+2. Install, start, validate, and harden MariaDB
+3. Filter records with `WHERE`, `AND`, `OR`, `BETWEEN`, `IN`, `LIKE`, and `IS NULL`
+4. Use string, date, numeric, NULL-handling, and conditional functions
+5. Sort results with `ORDER BY`
+6. Summarize records with aggregate functions and `GROUP BY`
+7. Filter grouped results with `HAVING`
 
 ---
 
@@ -22,13 +24,15 @@ By the end of this activity, you will be able to:
 
 | Item | Requirement |
 |---|---|
-| Database | MySQL 8.0 or later |
-| Client | MySQL Workbench or the `mysql` command-line client |
-| Access | Permission to create and drop a database |
+| AWS access | A sandbox account with permission to launch and terminate EC2 instances and manage security groups and key pairs |
+| Region | Use the same Region as your instructor; the examples use `us-east-1` |
+| Compute | One disposable Amazon Linux 2023 EC2 instance |
+| Database | MariaDB 10.5 or later, installed during this activity |
+| Database access | Local administrative access through `sudo mariadb`; no remote database port is required |
 | Script | [`employee-search-demo.sql`](employee-search-demo.sql) |
 
 > **Warning:** The script drops and recreates a database named
-> `conditional_search_demo`. Run it only in a classroom or disposable MySQL
+> `conditional_search_demo`. Run it only in a classroom or disposable MariaDB
 > environment. Do not reuse that database name for production data.
 
 ---
@@ -36,39 +40,155 @@ By the end of this activity, you will be able to:
 ## Activity Architecture
 
 ```text
-conditional_search_demo database
-└── employees table (20 rows)
-    ├── WHERE filters individual rows
-    ├── functions calculate or transform values
-    ├── GROUP BY creates summary groups
-    ├── HAVING filters the groups
-    └── ORDER BY sorts the final result
+Student computer
+└── SSH over TCP/22 from the student's IP only
+    └── Amazon Linux 2023 EC2 instance
+        └── MariaDB bound locally; TCP/3306 is not exposed
+            └── conditional_search_demo database
+                └── employees table (20 rows)
+                    ├── WHERE filters individual rows
+                    ├── functions calculate or transform values
+                    ├── GROUP BY creates summary groups
+                    ├── HAVING filters the groups
+                    └── ORDER BY sorts the final result
 ```
 
-The examples use one table so the focus stays on query logic rather than joins.
-The data includes different departments, salaries, cities, employment statuses,
-hire dates, and NULL manager values so each condition returns a useful result.
+MariaDB is a community-developed, MySQL-compatible relational database. This lab
+uses SQL that runs on MariaDB 10.5+ and MySQL 8.0+. The examples use one table so
+the focus stays on query logic rather than joins. The data includes different
+departments, salaries, cities, employment statuses, hire dates, and NULL manager
+values so each condition returns a useful result.
+
+---
+
+## Part 0 — Build the EC2 and MariaDB Prerequisites
+
+### Step 1: Launch the EC2 instance
+
+1. Open the **Amazon EC2 console** in the Region selected by your instructor.
+2. Choose **Launch instance**.
+3. Configure the instance:
+
+   | Setting | Value |
+   |---|---|
+   | Name | `batch29-mariadb-lab` |
+   | AMI | Amazon Linux 2023 AMI, 64-bit x86 |
+   | Instance type | `t3.micro`, or the small instance type permitted by your sandbox |
+   | Key pair | Select an existing lab key pair or create a new `.pem` key pair |
+   | Network | Default VPC and a public subnet for this short-lived lab |
+   | Public IPv4 | Enabled so the student can connect by SSH |
+   | Storage | 8 GiB `gp3`, encrypted |
+
+4. Create a security group named `batch29-mariadb-sg` with one inbound rule:
+
+   | Type | Protocol | Port | Source |
+   |---|---|---:|---|
+   | SSH | TCP | 22 | **My IP** (`your-public-ip/32`) |
+
+5. Do **not** add inbound rules for MariaDB/MySQL port `3306`, HTTP, or HTTPS.
+6. Launch the instance and wait until it is `Running` and both status checks pass.
+
+> **Security point:** MariaDB is used only from the EC2 shell. Keeping port
+> `3306` closed prevents direct database access from the internet. A production
+> database should normally run in private subnets with controlled application or
+> administrative access, not on a public EC2 instance.
+
+### Step 2: Connect by SSH
+
+Copy the instance's **Public DNS name** from the EC2 console. From Linux, macOS,
+or WSL, protect the downloaded key and connect:
+
+```bash
+chmod 400 batch29-mariadb.pem
+ssh -i batch29-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
+```
+
+From Windows PowerShell, use:
+
+```powershell
+ssh -i .\batch29-mariadb.pem ec2-user@YOUR_EC2_PUBLIC_DNS
+```
+
+Replace the key filename and DNS name with your actual values. Amazon Linux uses
+`ec2-user` as the default SSH username.
+
+**Checkpoint:** The shell prompt should identify the Amazon Linux EC2 instance.
+
+### Step 3: Install and start MariaDB
+
+On the EC2 instance, update the packages and install Git and the Amazon Linux
+2023 MariaDB server package:
+
+```bash
+sudo dnf upgrade -y
+sudo dnf install -y git mariadb105-server
+```
+
+Enable MariaDB at boot and start it now:
+
+```bash
+sudo systemctl enable --now mariadb
+```
+
+Validate the service and database engine:
+
+```bash
+sudo systemctl is-active mariadb
+mysql --version
+sudo mariadb -e "SELECT VERSION() AS mariadb_version;"
+```
+
+**Checkpoint:** `systemctl` must return `active`, and the version query must
+return a MariaDB version.
+
+### Step 4: Apply basic MariaDB hardening
+
+Run the interactive security utility:
+
+```bash
+sudo mysql_secure_installation
+```
+
+Follow the prompts shown by your installed version. Remove anonymous users,
+disable remote root login, remove the test database, and reload the privilege
+tables. Store any password you create in an approved password manager; do not put
+it in shell commands, scripts, screenshots, or Git.
+
+> **Production tradeoff:** A local administrative login is acceptable for this
+> isolated classroom activity. Applications should use a separate, least-
+> privilege database account and should not connect as `root`.
+
+### Step 5: Get the activity files
+
+Clone this repository on the EC2 instance and enter the lab folder:
+
+```bash
+git clone https://github.com/jjrs07/restart_batch_29.git
+cd restart_batch_29/06-mysql-conditional-search
+```
+
+Confirm that both activity files are present:
+
+```bash
+ls -l README.md employee-search-demo.sql
+```
 
 ---
 
 ## Part 1 — Create the Demo Data
 
-### Option A: MySQL Workbench
-
-1. Open `employee-search-demo.sql` in MySQL Workbench.
-2. Connect to your classroom MySQL instance.
-3. Run the script one section at a time.
-
-### Option B: MySQL command line
-
-From this lab folder, run:
+From the lab folder on the EC2 instance, load the complete dataset and examples:
 
 ```bash
-mysql -u root -p < employee-search-demo.sql
+sudo mariadb < employee-search-demo.sql
 ```
 
-Enter the password when prompted. Do not include a password directly in the
-command because it may be stored in shell history or exposed in the process list.
+The script prints several result sets because it includes both the 20-row dataset
+and the demonstration queries. To run queries individually, open the client:
+
+```bash
+sudo mariadb conditional_search_demo
+```
 
 Confirm the dataset:
 
@@ -217,19 +337,28 @@ that runs without an error can still implement the wrong business condition.
 
 ## Clean Up
 
-After completing the activity, remove only the demo database:
+Inside MariaDB, remove the demo database and exit:
 
 ```sql
 DROP DATABASE IF EXISTS conditional_search_demo;
+EXIT;
 ```
 
-**Checkpoint:** This query should return no rows:
+Back at the EC2 shell, confirm that the database no longer exists. The command
+should return no output:
 
-```sql
-SELECT SCHEMA_NAME
-FROM INFORMATION_SCHEMA.SCHEMATA
-WHERE SCHEMA_NAME = 'conditional_search_demo';
+```bash
+sudo mariadb --batch --skip-column-names -e \
+  "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'conditional_search_demo';"
 ```
+
+Then return to the EC2 console and terminate `batch29-mariadb-lab`. Verify that
+the instance reaches the `Terminated` state. Delete the lab-only security group
+and key pair if your instructor does not need them for another activity.
+
+> **Cost point:** Stopping an instance stops compute charges, but its EBS volume
+> can continue to incur storage charges. Terminating the disposable lab instance
+> and confirming its volume deletion avoids leaving recurring resources behind.
 
 ---
 
@@ -241,6 +370,43 @@ Select the demo database before running the queries:
 
 ```sql
 USE conditional_search_demo;
+```
+
+### SSH connection times out
+
+Confirm that the instance is running, both status checks passed, it has a public
+IPv4 address, and the security group allows TCP/22 from your current public IP.
+If your ISP changed your IP address, update the `/32` SSH source instead of
+opening SSH to `0.0.0.0/0`.
+
+### `No match for argument: mariadb105-server`
+
+Confirm that the instance uses Amazon Linux 2023, then refresh package metadata:
+
+```bash
+sudo dnf clean metadata
+sudo dnf makecache
+sudo dnf info mariadb105-server
+```
+
+Do not copy package commands intended for Ubuntu, Amazon Linux 2, or another
+distribution.
+
+### MariaDB does not start
+
+Inspect the service state and its recent log messages before changing anything:
+
+```bash
+sudo systemctl status mariadb --no-pager
+sudo journalctl -u mariadb --no-pager -n 50
+```
+
+### `Access denied for user 'root'@'localhost'`
+
+Use the local administrative socket login for this lab:
+
+```bash
+sudo mariadb
 ```
 
 ### The row count is greater than 20
@@ -274,6 +440,14 @@ GROUP BY grouping_column
 HAVING COUNT(*) >= 2
 ORDER BY average_value DESC;
 ```
+
+---
+
+## AWS References
+
+- [Launch a test EC2 instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/tutorial-launch-a-test-ec2-instance.html)
+- [Install MariaDB on Amazon Linux 2023](https://docs.aws.amazon.com/linux/al2023/ug/ec2-lamp-amazon-linux-2023.html)
+- [Configure EC2 security groups](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-security-group.html)
 
 ---
 
