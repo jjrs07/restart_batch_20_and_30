@@ -2,7 +2,8 @@
 
 **AWS re/Start — Batch 29 and 30**<br>
 **Duration:** 20–30 minutes<br>
-**Format:** Follow along in a Linux terminal (WSL, EC2, or a lab machine).
+**Format:** Independent, self-paced Linux terminal activity<br>
+**Region:** Not applicable for local Linux; use `us-east-2` (Ohio) if using EC2
 
 ---
 
