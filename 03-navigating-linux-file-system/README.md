@@ -1,6 +1,6 @@
 # Navigating the Linux File System — Absolute vs Relative Paths
 
-**AWS re/Start — Batch 29**
+**AWS re/Start — Batch 29 and 30**
 **Duration:** 35–50 minutes
 **Format:** Follow along in your own terminal (WSL, EC2, or any Linux shell). Type every command yourself — don't copy-paste the whole thing.
 
@@ -79,7 +79,7 @@ pwd
 You'll see something like:
 
 ```
-/home/jsant/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart
+/home/jsant/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart
 ```
 
 **That full line — starting with `/` — is your absolute path.** Write it down; it is your "base camp" for this lab. Yours will differ depending on where you cloned the repo and your username.
@@ -131,7 +131,7 @@ pwd        # you are now at the root
 2. Now go **straight** to the finance 2026 reports using an **absolute path**. Replace the front part with **your** base camp from Part 1:
 
 ```bash
-cd /home/<you>/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/finance/reports/2026
+cd /home/<you>/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/finance/reports/2026
 pwd
 ls
 ```
@@ -148,7 +148,7 @@ It prints its own location — proof you navigated correctly.
 
 > **Tip — save typing with `~`:** If your repo is under your home folder, you can put `~` at the front:
 > ```bash
-> cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart
+> cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart
 > ```
 > `~` is **not** a path by itself — it's a **shell shortcut for your home directory**. Before the command runs, the shell does **tilde expansion**: it swaps `~` for your real home. So `~/practice` becomes something like `/home/ec2-user/practice`. *After* that swap, the path starts with `/`, so what actually runs is an ordinary **absolute path** — just quicker to type.
 
@@ -163,7 +163,7 @@ Relative paths are shorter and are what you'll use most while working interactiv
 1. Go back to base camp:
 
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart
 pwd
 ```
 
@@ -219,7 +219,7 @@ pwd        # should be ...practice/cloudmart
 Try the toggle:
 
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/finance
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/finance
 cd ~            # go home
 cd -            # go straight back to finance
 pwd
@@ -242,7 +242,7 @@ Let's prove it with `cp` (copy). Its shape is `cp <source> <destination>` — **
 1. Start at base camp:
 
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart
 pwd
 ```
 
@@ -273,7 +273,7 @@ Relative paths depend on where you are. Absolute paths don't — they work from 
 1. Reset the environment to a clean state (this also removes the backup from 6a):
 
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system
 ./setup.sh
 ```
 
@@ -287,14 +287,14 @@ pwd        # you're at the root now — nowhere near cloudmart
 3. Run the **same** copy, but with **absolute paths**. Replace `/home/<you>` with your real home from Part 1 (or use `~`):
 
 ```bash
-cp ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/hr/policies/leave.txt \
-   ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/hr/leave-backup.txt
+cp ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/hr/policies/leave.txt \
+   ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/hr/leave-backup.txt
 ```
 
 4. Confirm — with an absolute path again, since you're still at `/`:
 
 ```bash
-ls ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart/departments/hr
+ls ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart/departments/hr
 ```
 
 **Checkpoint:** `leave-backup.txt` is there — even though you ran the command from `/`.
@@ -311,7 +311,7 @@ The source and destination don't have to use the same style — you can mix them
 1. Go back to base camp so the relative source makes sense:
 
 ```bash
-cd ~/restart_batch_29/03-navigating-linux-file-system/practice/cloudmart
+cd ~/restart_batch_20_and_30/03-navigating-linux-file-system/practice/cloudmart
 ```
 
 2. Copy the leave policy into `/tmp` — **relative source, absolute destination**:
@@ -395,4 +395,4 @@ rm -rf 03-navigating-linux-file-system/practice
 
 ---
 
-*AWS re/Start Batch 29 — Navigating the Linux File System*
+*AWS re/Start Batch 29 and 30 — Navigating the Linux File System*
