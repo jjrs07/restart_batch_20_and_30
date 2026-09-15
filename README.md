@@ -1,6 +1,6 @@
-# AWS re/Start — Batch 29 · Labs & Demos
+# AWS re/Start — Batch 29 and 30 · Labs & Demos
 
-Hands-on labs, demos, and walkthroughs for **AWS re/Start Batch 29**.
+Hands-on labs, demos, and walkthroughs for **AWS re/Start Batch 29 and 30**.
 Each lab lives in its own numbered folder and is self-contained — open the folder
 for today's session and follow its `README.md`.
 
@@ -23,7 +23,7 @@ More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
 ## 📖 References
 
-- **IPv4 Subnetting Cheat Sheet:** [GitHub-friendly Markdown](references/subnetting/) · [View rendered HTML](https://jjrs07.github.io/restart_batch_29/references/subnetting/)
+- **IPv4 Subnetting Cheat Sheet:** [GitHub-friendly Markdown](references/subnetting/) · [View rendered HTML](https://jjrs07.github.io/restart_batch_20_and_30/references/subnetting/)
 
 ---
 
@@ -31,8 +31,8 @@ More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
 1. Get the materials:
    ```bash
-   git clone https://github.com/jjrs07/restart_batch_29.git
-   cd restart_batch_29
+   git clone https://github.com/jjrs07/restart_batch_20_and_30.git
+   cd restart_batch_20_and_30
    ```
    *(Or download the ZIP and unzip it.)*
 2. Open the folder for today's lab, e.g. `02-s3-lab/`.
@@ -55,4 +55,4 @@ More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
 ---
 
-*AWS re/Start — Batch 29 · Maintained by the instructor.*
+*AWS re/Start — Batch 29 and 30 · Maintained by the instructor.*
