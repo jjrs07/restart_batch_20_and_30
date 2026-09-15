@@ -1,6 +1,6 @@
 # <Service / Topic> Hands-On Walkthrough (<AWS Console | CLI>)
 
-**AWS re/Start — Batch 29**
+**AWS re/Start — Batch 29 and 30**
 **Duration:** <45–60> minutes
 **Format:** Follow along with your instructor. Do every step in your own sandbox account.
 
@@ -89,4 +89,4 @@ By the end of this walkthrough you will be able to:
 
 ---
 
-*AWS re/Start Batch 29 — <Service / Topic> Hands-On Walkthrough*
+*AWS re/Start Batch 29 and 30 — <Service / Topic> Hands-On Walkthrough*
