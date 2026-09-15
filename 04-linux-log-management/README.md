@@ -1,10 +1,9 @@
 # Linux Log Management — Cron, Rotation, Retention & journalctl
 
-**AWS re/Start — Batch 29 and 30**
-
-**Duration:** 60–75 minutes
-
-**Format:** Follow along on an Amazon Linux EC2 instance or another systemd-based Linux machine. Type each command yourself.
+**AWS re/Start — Batch 29 and 30**<br>
+**Duration:** 60–75 minutes<br>
+**Format:** Independent, self-paced Linux terminal activity<br>
+**Region:** `us-east-2` (Ohio) if using EC2; not applicable for another Linux machine
 
 ---
 
