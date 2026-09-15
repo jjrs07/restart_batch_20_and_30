@@ -1,7 +1,7 @@
 # Example only: do not paste it without checking the path on your machine.
 # The actual path depends on where you cloned the repository.
 
-*/5 * * * * /home/ec2-user/restart_batch_29/04-linux-log-management/scripts/generate-log.sh
+*/5 * * * * /home/ec2-user/restart_batch_20_and_30/04-linux-log-management/scripts/generate-log.sh
 
 # Cron fields
 #
