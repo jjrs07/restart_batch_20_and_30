@@ -18,6 +18,7 @@ for today's session and follow its `README.md`.
 | 06 | **MySQL Conditional Search and Data Organization** | Build an Amazon Linux 2023 EC2 instance, install MariaDB, query a 30-employee dataset, and organize results with `ORDER BY`, `GROUP BY`, and `HAVING`. | [`06-mysql-conditional-search/`](06-mysql-conditional-search/) |
 | 07 | **Securing a Web Application with AWS Certificate Manager (ACM), Application Load Balancer, and HTTPS** | Deploy Apache on EC2, route traffic through an Application Load Balancer, validate an ACM certificate with public DNS, enable HTTPS, redirect HTTP, and troubleshoot failures. | [`07-acm-alb-https/`](07-acm-alb-https/) |
 | 08 | **Retrieving Data from Multiple Tables with MariaDB** | Query five related tables with `INNER`, `LEFT`, and `RIGHT` joins; emulate a full outer join; and compare `UNION`, `UNION ALL`, `INTERSECT`, and the `MINUS` concept using `EXCEPT`. | [`08-mariadb-multiple-table-queries/`](08-mariadb-multiple-table-queries/) |
+| 09 | **Amazon RDS with EC2 — Persistent CRUD Web Application** | Deploy a PHP CRUD app with EC2 user data, connect it to private RDS MySQL through security-group rules, verify database-backed operations, and prove the data survives EC2 replacement. | [`09-rds-ec2-crud/`](09-rds-ec2-crud/) |
 
 More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 

@@ -6,3 +6,4 @@ __pycache__/
 01-onprem-vs-cloud-website/deploy/build-user-data.sh
 01-onprem-vs-cloud-website/deploy/user-data-cloud.sh
 01-onprem-vs-cloud-website/dev-server.py
+Subnetting CheatSheet.xlsx
