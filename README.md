@@ -17,6 +17,7 @@ for today's session and follow its `README.md`.
 | 05 | **Downloading with curl and wget** | Compare `curl` and `wget`, download the AWS CLI installer with both tools, and choose the right command for common use cases. | [`05-curl-vs-wget/`](05-curl-vs-wget/) |
 | 06 | **MySQL Conditional Search and Data Organization** | Build an Amazon Linux 2023 EC2 instance, install MariaDB, query a 30-employee dataset, and organize results with `ORDER BY`, `GROUP BY`, and `HAVING`. | [`06-mysql-conditional-search/`](06-mysql-conditional-search/) |
 | 07 | **Securing a Web Application with AWS Certificate Manager (ACM), Application Load Balancer, and HTTPS** | Deploy Apache on EC2, route traffic through an Application Load Balancer, validate an ACM certificate with public DNS, enable HTTPS, redirect HTTP, and troubleshoot failures. | [`07-acm-alb-https/`](07-acm-alb-https/) |
+| 08 | **Retrieving Data from Multiple Tables with MariaDB** | Query five related tables with `INNER`, `LEFT`, and `RIGHT` joins; emulate a full outer join; and compare `UNION`, `UNION ALL`, `INTERSECT`, and the `MINUS` concept using `EXCEPT`. | [`08-mariadb-multiple-table-queries/`](08-mariadb-multiple-table-queries/) |
 
 More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
@@ -24,7 +25,7 @@ More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
 ## 📖 References
 
-- **IPv4 Subnetting Cheat Sheet:** [GitHub-friendly Markdown](references/subnetting/) · [View rendered HTML](https://jjrs07.github.io/restart_batch_20_and_30/references/subnetting/)
+- **IPv4 Subnetting Cheat Sheet:** [GitHub-friendly Markdown](references/subnetting/) · [View rendered HTML](https://jjrs07.github.io/restart_batch_29_and_30/references/subnetting/)
 
 ---
 
@@ -32,8 +33,8 @@ More labs (VPC, IAM, EC2 deep-dive, etc.) will be added as numbered folders.
 
 1. Get the materials:
    ```bash
-   git clone https://github.com/jjrs07/restart_batch_20_and_30.git
-   cd restart_batch_20_and_30
+   git clone https://github.com/jjrs07/restart_batch_29_and_30.git
+   cd restart_batch_29_and_30
    ```
    *(Or download the ZIP and unzip it.)*
 2. Open the folder for today's lab, e.g. `02-s3-lab/`.
